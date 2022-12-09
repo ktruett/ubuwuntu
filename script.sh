@@ -80,7 +80,7 @@ do
 	if [ $yn1 == yes ]
 	then
 		userdel -r ${users[${i}]}
-		printTime "${users[${i}]} has been deleted."
+		printTime "${users[${i}]} has been deleted"
 	else	
 		echo Make ${users[${i}]} administrator? yes or no
 		read yn2								
@@ -90,14 +90,14 @@ do
 			gpasswd -a ${users[${i}]} adm
 			gpasswd -a ${users[${i}]} lpadmin
 			gpasswd -a ${users[${i}]} sambashare
-			printTime "${users[${i}]} has been made an administrator."
+			printTime "${users[${i}]} has been made an administrator"
 		else
 			gpasswd -d ${users[${i}]} sudo
 			gpasswd -d ${users[${i}]} adm
 			gpasswd -d ${users[${i}]} lpadmin
 			gpasswd -d ${users[${i}]} sambashare
 			gpasswd -d ${users[${i}]} root
-			printTime "${users[${i}]} has been made a standard user."
+			printTime "${users[${i}]} has been made a standard user"
 		fi
 	fi
 done
@@ -110,7 +110,7 @@ for (( i=0;i<$usersNewLength;i++))
 do
 	echo ${usersNew[${i}]}
 	adduser ${usersNew[${i}]}
-	printTime "A user account for ${usersNew[${i}]} has been created."
+	printTime "A user account for ${usersNew[${i}]} has been created"
 	echo Make ${usersNew[${i}]} administrator? yes or no
 	read ynNew								
 	if [ $ynNew == yes ]
@@ -119,19 +119,19 @@ do
 		gpasswd -a ${usersNew[${i}]} adm
 		gpasswd -a ${usersNew[${i}]} lpadmin
 		gpasswd -a ${usersNew[${i}]} sambashare
-		printTime "${usersNew[${i}]} has been made an administrator."
+		printTime "${usersNew[${i}]} has been made an administrator"
 	else
-		printTime "${usersNew[${i}]} has been made a standard user."
+		printTime "${usersNew[${i}]} has been made a standard user"
 	fi
 done
 
 # Configuring /etc/shadow Permissions
 chmod 604 /etc/shadow
-printTime "Read/Write permissions on shadow have been set."
+printTime "Read/Write permissions on shadow have been set"
 
 # Configuring .bash_history Permissions
 chmod 640 .bash_history
-printTime "Bash history file permissions set."
+printTime "Bash history file permissions set"
 
 # Configuring User Passwords
 echo "Changing User Passwords"
@@ -143,7 +143,7 @@ chpasswd < userspasswds2.txt
 
 # Locking Root Account
 usermod -L root
-echo "Root account has been locked. Use 'usermod -U root' to unlock it."
+echo "Root account has been locked. Use 'usermod -U root' to unlock it"
 
 # Inputting all Audio Files into root/Desktop
 echo "Inputing Music File Names into Script.log"
@@ -164,7 +164,8 @@ find / -name "*.sid" -type f >> ~/Desktop/Script.log
 find / -name "*.flac" -type f >> ~/Desktop/Script.log
 find / -name "*.ogg" -type f >> ~/Desktop/Script.log
 
-# Inputting All Video Files into root/Desktop
+# Inputting all Video Files into root/Desktop
+echo "Inputing Video File Names into Script.log"
 find / -name "*.mpeg" -type f >> ~/Desktop/Script.log
 find / -name "*.mpg" -type f >> ~/Desktop/Script.log
 find / -name "*.mpe" -type f >> ~/Desktop/Script.log
@@ -209,7 +210,8 @@ find / -name "*.swf" -type f >> ~/Desktop/Script.log
 find / -name "*.flv" -type f >> ~/Desktop/Script.log
 find / -name "*.m4v" -type f >> ~/Desktop/Script.log
 
-# Inputting all Video Files into root/Desktop
+# Inputting all Image Files into root/Desktop
+echo "Inputing Image File Names into Script.log"
 find / -name "*.tiff" -type f >> ~/Desktop/Script.log
 find / -name "*.tif" -type f >> ~/Desktop/Script.log
 find / -name "*.rs" -type f >> ~/Desktop/Script.log
@@ -289,19 +291,19 @@ then
 		sed -i 's/####### Authentication #######/####### Authentication #######\nsecurity = user/g' /etc/samba/smb.conf
 	fi
 	sed -i 's/usershare allow guests = no/usershare allow guests = yes/g' /etc/samba/smb.conf
-	echo Type all user account names, with a space in between
+	echo "Type all user account names, with a space in between"
 	read -a usersSMB
 	usersSMBLength=${#usersSMB[@]}	
 	for (( i=0;i<$usersSMBLength;i++))
 	do
 		echo -e 'Moodle!22\nMoodle!22' | smbpasswd -a ${usersSMB[${i}]}
-		printTime "${usersSMB[${i}]} has been given the password 'Moodle!22' for Samba."
+		printTime "${usersSMB[${i}]} has been given the password 'Moodle!22' for Samba"
 	done
 	printTime "netbios-ns, netbios-dgm, netbios-ssn, and microsoft-ds ports have been denied. Samba config file has been configured."
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "Samba is complete."
+printTime "Samba is complete"
 
 # Configuring FTP
 if [ $ftpYN == no ]
@@ -328,9 +330,9 @@ then
 	service pure-ftpd
 	printTime "ftp, sftp, saft, ftps-data, and ftps ports have been allowed on the firewall. vsFTPd service has been restarted."
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "FTP is complete."
+printTime "FTP is complete"
 
 # Configuring SSH
 if [ $sshYN == no ]
@@ -343,7 +345,7 @@ then
 	apt-get install openssh-server -y -qq
 	ufw allow ssh
 	cp /etc/ssh/sshd_config ~/Desktop/backups/	
-	echo Type all user account names, with a space in between
+	echo "Type all user account names, with a space in between"
 	read usersSSH
 	service ssh restart
 	mkdir ~/.ssh
@@ -351,9 +353,9 @@ then
 	ssh-keygen -t rsa
 	printTime "SSH port has been allowed on the firewall. SSH config file has been configured. SSH RSA 2048 keys have been created."
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "SSH is complete."
+printTime "SSH is complete"
 
 # Configuring Telnet
 if [ $telnetYN == no ]
@@ -371,11 +373,11 @@ then
 	ufw allow telnet 
 	ufw allow rtelnet 
 	ufw allow telnets
-	printTime "Telnet port has been allowed on the firewall."
+	printTime "Telnet port has been allowed on the firewall"
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "Telnet is complete."
+printTime "Telnet is complete"
 
 # Configuring Mail Services
 if [ $mailYN == no ]
@@ -395,11 +397,11 @@ then
 	ufw allow imap2 
 	ufw allow imaps 
 	ufw allow pop3s
-	printTime "smtp, pop2, pop3, imap2, imaps, and pop3s ports have been allowed on the firewall."
+	printTime "smtp, pop2, pop3, imap2, imaps, and pop3s ports have been allowed on the firewall"
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "Mail is complete."
+printTime "Mail is complete"
 
 # Configuring Print Services
 if [ $printYN == no ]
@@ -407,17 +409,17 @@ then
 	ufw deny ipp 
 	ufw deny printer 
 	ufw deny cups
-	printTime "ipp, printer, and cups ports have been denied on the firewall."
+	printTime "ipp, printer, and cups ports have been denied on the firewall"
 elif [ $printYN == yes ]
 then
 	ufw allow ipp 
 	ufw allow printer 
 	ufw allow cups
-	printTime "ipp, printer, and cups ports have been allowed on the firewall."
+	printTime "ipp, printer, and cups ports have been allowed on the firewall"
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "Printing is complete."
+printTime "Printing is complete"
 
 # Configuring MySQL Database
 if [ $dbYN == no ]
@@ -457,9 +459,9 @@ then
 	service mysql restart
 	printTime "ms-sql-s, ms-sql-m, mysql, and mysql-proxy ports have been allowed on the firewall. MySQL has been installed. MySQL config file has been secured. MySQL service has been restarted."
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "MySQL is complete."
+printTime "MySQL is complete"
 
 # Configuring HTTP
 if [ $httpYN == no ]
@@ -483,9 +485,9 @@ then
 
 	printTime "http and https ports have been allowed on the firewall. Apache2 config file has been configured. Only root can now access the Apache2 folder."
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "Web Server is complete."
+printTime "Web Server is complete"
 
 # Configuring DNS
 if [ $dnsYN == no ]
@@ -496,11 +498,11 @@ then
 elif [ $dnsYN == yes ]
 then
 	ufw allow domain
-	printTime "domain port has been allowed on the firewall."
+	printTime "domain port has been allowed on the firewall"
 else
-	echo Response not recognized.
+	echo "Response not recognized"
 fi
-printTime "DNS is complete."
+printTime "DNS is complete"
 
 # Deleting Temp Password Files
 echo "Delete files created for passwords?"
