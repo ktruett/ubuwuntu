@@ -34,7 +34,7 @@ select yn in "Yes" "No"; do
 done
 
 # Creates Backup and Script Log
-echo "Creating backup folder and script log"
+echo "Creating backup folder and script log on the Desktop"
 mkdir -p ~/Desktop/backups
 chmod 777 ~/Desktop/backups
 touch ~/Desktop/Script.log
@@ -42,6 +42,7 @@ echo > ~/Desktop/Script.log
 chmod 777 ~/Desktop/Script.log
 
 # Backs up group and passwd Files
+echo "Backing up /etc/group and /etc/passwd"
 cp /etc/group ~/Desktop/backups/
 cp /etc/passwd ~/Desktop/backups/
 
@@ -55,6 +56,8 @@ select yn in "Yes" "No"; do
 done
 
 # Running Updates
+echo "Running updates"
+sleep 5
 apt-get update && apt-get upgrade -y
 echo "Run apt-get dist-upgrade?"
 select yn in "Yes" "No"; do
@@ -65,11 +68,11 @@ select yn in "Yes" "No"; do
 done
 
 # Installing and Enabling Firewall
-apt-get install gufw -y && ufw enable 
+echo "Installing and enabling firewall"
+apt-get install gufw -y && ufw enable
 
 # Checking for Correct User Group Settings
-echo "User Managment Stuff"
-echo "Type all user account names, with a space in between"
+echo "User Group Settings : Type all user account names, with a space in between"
 read -a users
 usersLength=${#users[@]}	
 for (( i=0;i<$usersLength;i++))
@@ -103,7 +106,7 @@ do
 done
 
 # Adding Users and Properly Assigning Groups
-echo "Type user account names of users you want to add, with a space in between"
+echo "Adding Users : Type user account names of users you want to add, with a space in between"
 read -a usersNew
 usersNewLength=${#usersNew[@]}	
 for (( i=0;i<$usersNewLength;i++))
@@ -126,12 +129,12 @@ do
 done
 
 # Configuring /etc/shadow Permissions
+echo "Setting Read/Write permissions on /etc/shadow"
 chmod 604 /etc/shadow
-printTime "Read/Write permissions on shadow have been set"
 
 # Configuring .bash_history Permissions
+echo "Setting file permissions set on /.bash_history"
 chmod 640 .bash_history
-printTime "Bash history file permissions set"
 
 # Configuring User Passwords
 echo "Changing User Passwords"
@@ -142,8 +145,8 @@ sed 's/[[:blank:]]//g' userspasswds.txt > userspasswds2.txt
 chpasswd < userspasswds2.txt 
 
 # Locking Root Account
+echo "Root account is being locked. Use 'usermod -U root' to unlock it"
 usermod -L root
-echo "Root account has been locked. Use 'usermod -U root' to unlock it"
 
 # Inputting all Audio Files into root/Desktop
 echo "Inputing Music File Names into Script.log"
@@ -242,8 +245,6 @@ select yn in "Yes" "No"; do
 done
 echo "Finished purges"
 
-sleep 5
-
 # Asking if Services are Required
 echo "Service Management"
 echo Does this machine need Samba?
@@ -266,6 +267,7 @@ echo Does this machine need DNS?
 read dnsYN
 
 # Configuring Samba
+echo "Samba Configuration"
 if [ $sambaYN == no ]
 then
 	ufw deny netbios-ns
@@ -306,6 +308,7 @@ fi
 printTime "Samba is complete"
 
 # Configuring FTP
+echo "FTP Configuration"
 if [ $ftpYN == no ]
 then
 	ufw deny ftp 
@@ -335,6 +338,7 @@ fi
 printTime "FTP is complete"
 
 # Configuring SSH
+echo "SSH Configuration"
 if [ $sshYN == no ]
 then
 	ufw deny ssh
@@ -358,6 +362,7 @@ fi
 printTime "SSH is complete"
 
 # Configuring Telnet
+echo "Telnet Configuration"
 if [ $telnetYN == no ]
 then
 	ufw deny telnet 
@@ -380,6 +385,7 @@ fi
 printTime "Telnet is complete"
 
 # Configuring Mail Services
+echo "Mail Service Configuration"
 if [ $mailYN == no ]
 then
 	ufw deny smtp 
@@ -404,6 +410,7 @@ fi
 printTime "Mail is complete"
 
 # Configuring Print Services
+echo "Print Service Configuration"
 if [ $printYN == no ]
 then
 	ufw deny ipp 
@@ -422,6 +429,7 @@ fi
 printTime "Printing is complete"
 
 # Configuring MySQL Database
+echo "MySQL Database Configuration"
 if [ $dbYN == no ]
 then
 	ufw deny ms-sql-s 
@@ -464,6 +472,7 @@ fi
 printTime "MySQL is complete"
 
 # Configuring HTTP
+echo "HTTP Configuration"
 if [ $httpYN == no ]
 then
 	ufw deny http
@@ -490,6 +499,7 @@ fi
 printTime "Web Server is complete"
 
 # Configuring DNS
+echo "DNS Configuration"
 if [ $dnsYN == no ]
 then
 	ufw deny domain
@@ -505,7 +515,7 @@ fi
 printTime "DNS is complete"
 
 # Deleting Temp Password Files
-echo "Delete files created for passwords?"
+echo "Delete temp files created for passwords?"
 select yn in "Yes" "No"; do
 	case $yn in
 		Yes )  rm /users.txt; rm /userspasswds.txt; rm /userspasswds2.txt; break;;
