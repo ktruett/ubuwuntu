@@ -146,7 +146,7 @@ chpasswd < userspasswds2.txt
 
 # Locking Root Account
 echo "Root account is being locked. Use 'usermod -U root' to unlock it"
-usermod -L root
+passwd -dl root
 
 # Inputting all Audio Files into root/Desktop
 echo "Inputing Music File Names into Script.log"
@@ -235,15 +235,11 @@ find / -name "*.ico" -type f >> ~/Desktop/Script.log
 find / -name "*.svg" -type f >> ~/Desktop/Script.log
 find / -name "*.svgz" -type f >> ~/Desktop/Script.log
 
-# Purging all Malicious Software
-echo "Purge Malicious Software?"
-select yn in "Yes" "No"; do
-	case $yn in
-		Yes )  apt-get purge wireshark -y; apt-get purge libndpi-wireshark -y; apt-get purge libvirt-wireshark -y; apt-get purge libwireshark-data -y; apt-get purge libwireshark-dev -y; apt-get purge libwireshark11 -y; apt-get purge libwireshark14 -y; apt-get purge libwireshark15 -y; apt-get purge libwireshark16 -y; apt-get purge libwireshark8 -y; apt-get purge wireshark-common -y; apt-get purge wireshark-dev -y; apt-get purge wireshark-doc -y; apt-get purge wireshark-gtk -y; apt-get purge wireshark-qt -y; apt-get purge nmap -y; apt-get purge libnmap-parser-perl -y; apt-get purge nmap-common -y; apt-get purge nmapsi4 -y; apt-get purge python-libnmap -y; apt-get purge python-libnmap-doc -y; apt-get purge python-nmap -y; apt-get purge python3-libnmap -y; apt-get purge python3-nmap -y; apt-get purge zennmap -y; apt-get purge transmission -y; apt-get purge elpa-transmission -y; apt-get purge librust-transmission-client-dev -y; apt-get purge libtransmission-client-perl -y; apt-get purge python-transmissionrpc -y; apt-get purge python-transmissionrpc-doc -y; apt-get purge python3-transmissionrpc -y; apt-get purge transmission-cli -y; apt-get purge transmission-common -y; apt-get purge transmission-daemon -y; apt-get purge transmission-gtk -y; apt-get purge transmission-qt -y; apt-get purge transmission-remote-cli -y; apt-get purge transmission-remote-gtk -y; apt-get purge deluge -y; apt-get purge deluge-common -y; apt-get purge deluge-console -y; apt-get purge deluge-gtk -y; apt-get purge deluge-torrent -y; apt-get purge deluge-web -y; apt-get purge deluge-webgui -y; apt-get purge deluged -y; apt-get purge netcat -y; apt-get purge netcat-openbsd -y; apt-get purge netcat-traditional -y; apt-get purge ncat -y; apt-get purge hydra -y; apt-get purge hydra-gtk -y; apt-get purge aircrack-ng -y; apt-get purge fcrackzip -y; apt-get purge lcrack -y; apt-get purge ophcrack -y; apt-get purge ophcrack-cli -y; apt-get purge pdfcrack -y; apt-get purge pyrit -y; apt-get purge pyrit-opencl -y; apt-get purge rarcrack -y; apt-get purge sipcrack -y; apt-get purge irpas -y; apt-get purge nikto -y; apt-get purge kismet -y; apt-get purge kismet-plugins -y; apt-get purge logkeys -y; apt-get purge zeitgeist-core -y; apt-get purge zeitgeist-datahub -y; apt-get purge python-zeitgeist -y; apt-get purge rhythmbox-plugin-zeitgeist -y; apt-get purge zeitgeist -y; apt-get purge nfs-kernel-server -y; apt-get purge nfs-common -y; apt-get purge portmap -y; apt-get purge rpcbind -y; apt-get purge autofs -y; apt-get purge nginx -y; apt-get purge nginx-common -y; apt-get purge inetd -y; apt-get purge openbsd-inetd -y; apt-get purge xinetd -y; apt-get purge inetutils-ftp -y; apt-get purge inetutils-ftpd -y; apt-get purge inetutils-inetd -y; apt-get purge inetutils-ping -y; apt-get purge inetutils-sylogd -y; apt-get purge inetutils-talk -y; apt-get purge inetutils-talkd -y; apt-get purge inetutils-telnet -y; apt-get purge inetutils-telnetd -y; apt-get purge inetutils-tools -y; apt-get purge inetutils-traceroute-y; apt-get purge vnc4server -y; apt-get purge vncsnapshot -y; apt-get purge vtgrab -y; apt-get purge snmp -y; break;;
-		No ) break;;
-	esac
-done
-echo "Finished purges"
+# Purging Malicious Software
+bad_programs = ["wireshark", "libndpi-wireshark", "libvirt-wireshark", "libwireshark-data", "libwireshark-dev", "libwireshark11", "libwireshark14", "libwireshark15", "libwireshark16", "libwireshark8", "wireshark-common", "wireshark-dev", "wireshark-gtk", "wireshark-qt", "nmap", "libnmap-parser-perl", "nmap-common", "nmapsi4", "python-libnmap", "python-libnmap-doc", "python-nmap", "python3-libnmap", "python3-nmap", "zenmap", "transmission", "elpa-transmission", "librust-transmission-client-dev", "libtransmission-client-perl", "python-transmissionrpc", "python-transmissionrpc-doc", "python3-transmissionrpc", "transmission-cli", "transmission-common", "transmission-daemon", "transmission-gtk", "transmission-qt", "transmission-remote-cli", "transmission-remote-gtk", "deluge", "deluge-common", "deluge-console", "deluge-gtk", "deluge-torrent", "deluge-web", "deluge-webui", "deluged", "netcat", "netcat-openbsd", "netcat-traditional", "ncat", "john", "john-data", "hydra", "hydra-gtk", "aircrack-ng", "fcrackzip", "lcrack", "ophcrack", "ophcrack-cli", "pdfcrack", "pyrit", "pyrit-opencl", "rarcrack", "sipcrack", "irpas", "nikto", "kismet", "kistmet-plugins"]
+if input("Remove known bad programs? (y/n) ") == "y":
+    for program in bad_programs:
+        subprocess.call(["sudo", "apt", "purge", program + "*", "-y"])
 
 # Asking if Services are Required
 echo Does this machine need Samba?
@@ -545,5 +541,26 @@ echo "Complete!"
 
 
 
-#forbidden line
+
+
+
+
+
+
+
+
+
+
+
+
+# Purging all Malicious Software
+# echo "Purge Malicious Software?"
+# select yn in "Yes" "No"; do
+#	case $yn in
+#		Yes )  apt-get purge wireshark -y; apt-get purge libndpi-wireshark -y; apt-get purge libvirt-wireshark -y; apt-get purge libwireshark-data -y; apt-get purge libwireshark-dev -y; apt-get purge libwireshark11 -y; apt-get purge libwireshark14 -y; apt-get purge libwireshark15 -y; apt-get purge libwireshark16 -y; apt-get purge libwireshark8 -y; apt-get purge wireshark-common -y; apt-get purge wireshark-dev -y; apt-get purge wireshark-doc -y; apt-get purge wireshark-gtk -y; apt-get purge wireshark-qt -y; apt-get purge nmap -y; apt-get purge libnmap-parser-perl -y; apt-get purge nmap-common -y; apt-get purge nmapsi4 -y; apt-get purge python-libnmap -y; apt-get purge python-libnmap-doc -y; apt-get purge python-nmap -y; apt-get purge python3-libnmap -y; apt-get purge python3-nmap -y; apt-get purge zennmap -y; apt-get purge transmission -y; apt-get purge elpa-transmission -y; apt-get purge librust-transmission-client-dev -y; apt-get purge libtransmission-client-perl -y; apt-get purge python-transmissionrpc -y; apt-get purge python-transmissionrpc-doc -y; apt-get purge python3-transmissionrpc -y; apt-get purge transmission-cli -y; apt-get purge transmission-common -y; apt-get purge transmission-daemon -y; apt-get purge transmission-gtk -y; apt-get purge transmission-qt -y; apt-get purge transmission-remote-cli -y; apt-get purge transmission-remote-gtk -y; apt-get purge deluge -y; apt-get purge deluge-common -y; apt-get purge deluge-console -y; apt-get purge deluge-gtk -y; apt-get purge deluge-torrent -y; apt-get purge deluge-web -y; apt-get purge deluge-webgui -y; apt-get purge deluged -y; apt-get purge netcat -y; apt-get purge netcat-openbsd -y; apt-get purge netcat-traditional -y; apt-get purge ncat -y; apt-get purge hydra -y; apt-get purge hydra-gtk -y; apt-get purge aircrack-ng -y; apt-get purge fcrackzip -y; apt-get purge lcrack -y; apt-get purge ophcrack -y; apt-get purge ophcrack-cli -y; apt-get purge pdfcrack -y; apt-get purge pyrit -y; apt-get purge pyrit-opencl -y; apt-get purge rarcrack -y; apt-get purge sipcrack -y; apt-get purge irpas -y; apt-get purge nikto -y; apt-get purge kismet -y; apt-get purge kismet-plugins -y; apt-get purge logkeys -y; apt-get purge zeitgeist-core -y; apt-get purge zeitgeist-datahub -y; apt-get purge python-zeitgeist -y; apt-get purge rhythmbox-plugin-zeitgeist -y; apt-get purge zeitgeist -y; apt-get purge nfs-kernel-server -y; apt-get purge nfs-common -y; apt-get purge portmap -y; apt-get purge rpcbind -y; apt-get purge autofs -y; apt-get purge nginx -y; apt-get purge nginx-common -y; apt-get purge inetd -y; apt-get purge openbsd-inetd -y; apt-get purge xinetd -y; apt-get purge inetutils-ftp -y; apt-get purge inetutils-ftpd -y; apt-get purge inetutils-inetd -y; apt-get purge inetutils-ping -y; apt-get purge inetutils-sylogd -y; apt-get purge inetutils-talk -y; apt-get purge inetutils-talkd -y; apt-get purge inetutils-telnet -y; apt-get purge inetutils-telnetd -y; apt-get purge inetutils-tools -y; apt-get purge inetutils-traceroute-y; apt-get purge vnc4server -y; apt-get purge vncsnapshot -y; apt-get purge vtgrab -y; apt-get purge snmp -y; break;;
+#		No ) break;;
+#	esac
+# done
+# echo "Finished purges"
+
 #apt-get install clamav -y && cd / && freshclam && clamscan Line 70
