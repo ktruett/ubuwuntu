@@ -141,7 +141,7 @@ awk '{print $0, ":S3cureP@ssw0rd123!"}' users.txt > userspasswds.txt
 sed 's/[[:blank:]]//g' userspasswds.txt > userspasswds2.txt 
 chpasswd < userspasswds2.txt 
 
-#Locking Root Account
+# Locking Root Account
 usermod -L root
 echo "Root account has been locked. Use 'usermod -U root' to unlock it."
 
@@ -242,8 +242,8 @@ echo "Finished purges"
 
 sleep 5
 
-echo "Service Managment"
-
+# Asking if Services are Required
+echo "Service Management"
 echo Does this machine need Samba?
 read sambaYN
 echo Does this machine need FTP?
@@ -263,6 +263,7 @@ read httpYN
 echo Does this machine need DNS?
 read dnsYN
 
+# Configuring Samba
 if [ $sambaYN == no ]
 then
 	ufw deny netbios-ns
@@ -288,7 +289,6 @@ then
 		sed -i 's/####### Authentication #######/####### Authentication #######\nsecurity = user/g' /etc/samba/smb.conf
 	fi
 	sed -i 's/usershare allow guests = no/usershare allow guests = yes/g' /etc/samba/smb.conf
-	
 	echo Type all user account names, with a space in between
 	read -a usersSMB
 	usersSMBLength=${#usersSMB[@]}	
@@ -303,6 +303,7 @@ else
 fi
 printTime "Samba is complete."
 
+# Configuring FTP
 if [ $ftpYN == no ]
 then
 	ufw deny ftp 
@@ -331,6 +332,7 @@ else
 fi
 printTime "FTP is complete."
 
+# Configuring SSH
 if [ $sshYN == no ]
 then
 	ufw deny ssh
@@ -353,6 +355,7 @@ else
 fi
 printTime "SSH is complete."
 
+# Configuring Telnet
 if [ $telnetYN == no ]
 then
 	ufw deny telnet 
@@ -374,6 +377,7 @@ else
 fi
 printTime "Telnet is complete."
 
+# Configuring Mail Services
 if [ $mailYN == no ]
 then
 	ufw deny smtp 
@@ -397,6 +401,7 @@ else
 fi
 printTime "Mail is complete."
 
+# Configuring Print Services
 if [ $printYN == no ]
 then
 	ufw deny ipp 
@@ -414,6 +419,7 @@ else
 fi
 printTime "Printing is complete."
 
+# Configuring MySQL Database
 if [ $dbYN == no ]
 then
 	ufw deny ms-sql-s 
@@ -455,6 +461,7 @@ else
 fi
 printTime "MySQL is complete."
 
+# Configuring HTTP
 if [ $httpYN == no ]
 then
 	ufw deny http
@@ -480,6 +487,7 @@ else
 fi
 printTime "Web Server is complete."
 
+# Configuring DNS
 if [ $dnsYN == no ]
 then
 	ufw deny domain
@@ -494,6 +502,7 @@ else
 fi
 printTime "DNS is complete."
 
+# Deleting Temp Password Files
 echo "Delete files created for passwords?"
 select yn in "Yes" "No"; do
 	case $yn in
@@ -502,15 +511,24 @@ select yn in "Yes" "No"; do
 	esac
 done
 
+# Autoremoving Unused Packages
 echo "Removing unused packages"
-
-sleep 3
-
+sleep 5
 apt-get autoremove -y
 apt-get autoclean -y
 apt-get clean -y
 
 echo "Complete!"
+
+
+
+
+
+
+
+
+
+
 
 
 
