@@ -1,5 +1,6 @@
 #!/bin/bash 
 
+# Defining PrintTime Function
 startTime=$(date +"%s")
 printTime()
 {
@@ -23,6 +24,7 @@ printTime()
 	fi
 }
 
+# Checks for Sudo Permission
 echo "Are you running this script as sudo?"
 select yn in "Yes" "No"; do
 	case $yn in
@@ -31,18 +33,19 @@ select yn in "Yes" "No"; do
 	esac
 done
 
+# Creates Backup and Script Log
 echo "Creating backup folder and script log"
-
 mkdir -p ~/Desktop/backups
 chmod 777 ~/Desktop/backups
-
 touch ~/Desktop/Script.log
 echo > ~/Desktop/Script.log
 chmod 777 ~/Desktop/Script.log
 
+# Backs up group and passwd Files
 cp /etc/group ~/Desktop/backups/
 cp /etc/passwd ~/Desktop/backups/
 
+# Checking for Pre-Configured Update Policies
 echo "Have you configured update policies?"
 select yn in "Yes" "No"; do
 	case $yn in
@@ -51,8 +54,8 @@ select yn in "Yes" "No"; do
 	esac
 done
 
+# Running Updates
 apt-get update && apt-get upgrade -y
-
 echo "Run apt-get dist-upgrade?"
 select yn in "Yes" "No"; do
 	case $yn in
@@ -61,17 +64,14 @@ select yn in "Yes" "No"; do
 	esac
 done
 
+# Installing and Enabling Firewall
 apt-get install gufw -y && ufw enable 
 
-apt-get install clamav -y && cd / && freshclam && clamscan
-
+# Checking for Correct User Group Settings
 echo "User Managment Stuff"
-
-echo Type all user account names, with a space in between
+echo "Type all user account names, with a space in between"
 read -a users
-
 usersLength=${#users[@]}	
-
 for (( i=0;i<$usersLength;i++))
 do
 	echo ${users[${i}]}
@@ -102,13 +102,10 @@ do
 	fi
 done
 
-sleep 5
-
-echo Type user account names of users you want to add, with a space in between
+# Adding Users and Properly Assigning Groups
+echo "Type user account names of users you want to add, with a space in between"
 read -a usersNew
-
 usersNewLength=${#usersNew[@]}	
-
 for (( i=0;i<$usersNewLength;i++))
 do
 	echo ${usersNew[${i}]}
@@ -128,31 +125,28 @@ do
 	fi
 done
 
+# Configuring /etc/shadow Permissions
 chmod 604 /etc/shadow
 printTime "Read/Write permissions on shadow have been set."
 
+# Configuring .bash_history Permissions
 chmod 640 .bash_history
 printTime "Bash history file permissions set."
 
+# Configuring User Passwords
 echo "Changing User Passwords"
-
 sleep 5
-
 ls /home > users.txt 
-
 awk '{print $0, ":S3cureP@ssw0rd123!"}' users.txt > userspasswds.txt 
-
 sed 's/[[:blank:]]//g' userspasswds.txt > userspasswds2.txt 
-
 chpasswd < userspasswds2.txt 
 
+#Locking Root Account
 usermod -L root
 echo "Root account has been locked. Use 'usermod -U root' to unlock it."
 
-sleep 3
-
+# Inputting all Audio Files into root/Desktop
 echo "Inputing Music File Names into Script.log"
-
 find / -name "*.midi" -type f >> ~/Desktop/Script.log
 find / -name "*.mid" -type f >> ~/Desktop/Script.log
 find / -name "*.mod" -type f >> ~/Desktop/Script.log
@@ -170,6 +164,7 @@ find / -name "*.sid" -type f >> ~/Desktop/Script.log
 find / -name "*.flac" -type f >> ~/Desktop/Script.log
 find / -name "*.ogg" -type f >> ~/Desktop/Script.log
 
+# Inputting All Video Files into root/Desktop
 find / -name "*.mpeg" -type f >> ~/Desktop/Script.log
 find / -name "*.mpg" -type f >> ~/Desktop/Script.log
 find / -name "*.mpe" -type f >> ~/Desktop/Script.log
@@ -214,6 +209,7 @@ find / -name "*.swf" -type f >> ~/Desktop/Script.log
 find / -name "*.flv" -type f >> ~/Desktop/Script.log
 find / -name "*.m4v" -type f >> ~/Desktop/Script.log
 
+# Inputting all Video Files into root/Desktop
 find / -name "*.tiff" -type f >> ~/Desktop/Script.log
 find / -name "*.tif" -type f >> ~/Desktop/Script.log
 find / -name "*.rs" -type f >> ~/Desktop/Script.log
@@ -234,8 +230,7 @@ find / -name "*.ico" -type f >> ~/Desktop/Script.log
 find / -name "*.svg" -type f >> ~/Desktop/Script.log
 find / -name "*.svgz" -type f >> ~/Desktop/Script.log
 
-sleep 5
-
+# Purging all Malicious Software
 echo "Purge Malicious Software?"
 select yn in "Yes" "No"; do
 	case $yn in
@@ -243,7 +238,6 @@ select yn in "Yes" "No"; do
 		No ) break;;
 	esac
 done
-
 echo "Finished purges"
 
 sleep 5
@@ -517,3 +511,10 @@ apt-get autoclean -y
 apt-get clean -y
 
 echo "Complete!"
+
+
+
+
+
+#forbidden line
+#apt-get install clamav -y && cd / && freshclam && clamscan Line 70
