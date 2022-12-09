@@ -509,6 +509,22 @@ else
 fi
 printTime "DNS is complete"
 
+# Backing up Crontab, Removing Startup Tasks, and Only Allowing Root
+echo "Backing up Crontab, Removing Startup Tasks, and Only Allowing Root in Cron"
+crontab -l > ~/Desktop/crontab-old
+crontab -r
+cd /etc/
+/bin/rm -f cron.deny at.deny
+echo root >cron.allow
+echo root >at.allow
+/bin/chown root:root cron.allow at.allow
+/bin/chmod 400 cron.allow at.allow
+cd ..
+
+# Fixing Shellshock Bash Vulnerability
+echo "Running Shellshock Bash Vulnerability Test"
+env i='() { :;}; echo Your system is Bash vulnerable' bash -c "echo Bash vulnerability test"
+
 # Deleting Temp Password Files
 echo "Delete temp files created for passwords?"
 select yn in "Yes" "No"; do
