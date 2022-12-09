@@ -235,7 +235,7 @@ find / -name "*.ico" -type f >> ~/Desktop/Script.log
 find / -name "*.svg" -type f >> ~/Desktop/Script.log
 find / -name "*.svgz" -type f >> ~/Desktop/Script.log
 
-Purging all Malicious Software
+# Purging all Malicious Software
 echo "Purge Malicious Software?"
 select yn in "Yes" "No"; do
 	case $yn in
@@ -243,7 +243,6 @@ select yn in "Yes" "No"; do
 		No ) break;;
 	esac
 done
-echo "Finished purges"
 
 # Asking if Services are Required
 echo Does this machine need Samba?
