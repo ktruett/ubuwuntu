@@ -246,7 +246,6 @@ done
 echo "Finished purges"
 
 # Asking if Services are Required
-echo "Service Management"
 echo Does this machine need Samba?
 read sambaYN
 echo Does this machine need FTP?
